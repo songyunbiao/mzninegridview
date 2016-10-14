@@ -8,5 +8,6 @@
     <!-- 白色 -->
     <color name="white">#ffffff</color>
     <color name="bar_color">#232325</color>
+    <color name="md_black_1000">#000000</color>
 
 </resources>

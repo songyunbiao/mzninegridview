@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/md_black_1000"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/layout_bar"
+        layout="@layout/layout_title"/>
+
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/big_thumbnail"
+        android:scaleType="center"/>
+
+</LinearLayout>
+
+<!--android:layout_centerInParent="true"  It's work   https://github.com/chrisbanes/PhotoView/issues/357-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:id="@+id/rootView"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@color/md_black_1000">-->
+
+    <!--<include-->
+        <!--android:id="@+id/layout_bar"-->
+        <!--layout="@layout/layout_title"/>-->
+
+    <!--<uk.co.senab.photoview.PhotoView-->
+        <!--android:id="@+id/picture"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:scaleType="center"/>-->
+
+<!--</RelativeLayout>-->
+
