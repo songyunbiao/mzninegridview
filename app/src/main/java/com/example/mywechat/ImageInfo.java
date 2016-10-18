@@ -1,7 +1,7 @@
 package com.example.mywechat;
 
 public class ImageInfo {
-    public String thumbnailUrl;
+    private String thumbnailUrl;
 //    public String bigImageUrl;
 //    public int imageViewHeight;
 //    public int imageViewWidth;

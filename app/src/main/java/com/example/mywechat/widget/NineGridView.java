@@ -2,7 +2,6 @@ package com.example.mywechat.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -11,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.mywechat.ImageInfo;
 import com.example.mywechat.NineGridViewWrapper;
 import com.example.mywechat.R;
@@ -23,8 +24,6 @@ public class NineGridView extends ViewGroup {
 
     public static final int MODE_FILL = 0;          //填充模式，类似于微信
     public static final int MODE_GRID = 1;          //网格模式，类似于QQ，4张图会 2X2布局
-
-    private static ImageLoader mImageLoader;        //全局的图片加载器(必须设置,否者不显示图片)
 
     private int singleImageSize = 250;              // 单张图片时的最大大小,单位dp
     private float singleImageRatio = 1.0f;          // 单张图片的宽高比(宽/高)
@@ -100,9 +99,12 @@ public class NineGridView extends ViewGroup {
         int childrenCount = mImageInfo.size();
         for (int i = 0; i < childrenCount; i++) {
             ImageView childrenView = (ImageView) getChildAt(i);
-            if (mImageLoader != null) {
-                mImageLoader.onDisplayImage(getContext(), childrenView, mImageInfo.get(i).thumbnailUrl);
-            }
+            Glide.with(getContext())
+                    .load(mImageInfo.get(i).getThumbnailUrl())
+                    .asBitmap()
+                    .error(R.mipmap.ic_launcher)//TODO
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(childrenView);
             int rowNum = i / columnCount;
             int columnNum = i % columnCount;
             int left = (gridWidth + gridSpacing) * columnNum + getPaddingLeft();
@@ -113,7 +115,9 @@ public class NineGridView extends ViewGroup {
         }
     }
 
-    /** 设置适配器 */
+    /**
+     * 设置适配器
+     */
     public void setAdapter(@NonNull NineGridViewAdapter adapter) {
         mAdapter = adapter;
         List<ImageInfo> imageInfo = adapter.getImageInfo();
@@ -174,7 +178,9 @@ public class NineGridView extends ViewGroup {
         requestLayout();
     }
 
-    /** 获得 ImageView 保证了 ImageView 的重用 */
+    /**
+     * 获得 ImageView 保证了 ImageView 的重用
+     */
     private ImageView getImageView(final int position) {
         ImageView imageView;
         if (position < imageViews.size()) {
@@ -192,22 +198,30 @@ public class NineGridView extends ViewGroup {
         return imageView;
     }
 
-    /** 设置宫格间距 */
+    /**
+     * 设置宫格间距
+     */
     public void setGridSpacing(int spacing) {
         gridSpacing = spacing;
     }
 
-    /** 设置只有一张图片时的宽 */
+    /**
+     * 设置只有一张图片时的宽
+     */
     public void setSingleImageSize(int maxImageSize) {
         singleImageSize = maxImageSize;
     }
 
-    /** 设置只有一张图片时的宽高比 */
+    /**
+     * 设置只有一张图片时的宽高比
+     */
     public void setSingleImageRatio(float ratio) {
         singleImageRatio = ratio;
     }
 
-    /** 设置最大图片数 */
+    /**
+     * 设置最大图片数
+     */
     public void setMaxSize(int maxSize) {
         maxImageSize = maxSize;
     }
@@ -216,28 +230,20 @@ public class NineGridView extends ViewGroup {
         return maxImageSize;
     }
 
-    public static void setImageLoader(ImageLoader imageLoader) {
-        mImageLoader = imageLoader;
-    }
-
-    public static ImageLoader getImageLoader() {
-        return mImageLoader;
-    }
-
-    public interface ImageLoader {
-        /**
-         * 需要子类实现该方法，以确定如何加载和显示图片
-         *
-         * @param context   上下文
-         * @param imageView 需要展示图片的ImageView
-         * @param url       图片地址
-         */
-        void onDisplayImage(Context context, ImageView imageView, String url);
-
-        /**
-         * @param url 图片的地址
-         * @return 当前框架的本地缓存图片
-         */
-        Bitmap getCacheImage(String url);
-    }
+//    public interface ImageLoader {
+//        /**
+//         * 需要子类实现该方法，以确定如何加载和显示图片
+//         *
+//         * @param context   上下文
+//         * @param imageView 需要展示图片的ImageView
+//         * @param url       图片地址
+//         */
+//        void onDisplayImage(Context context, ImageView imageView, String url);
+//
+//        /**
+//         * @param url 图片的地址
+//         * @return 当前框架的本地缓存图片
+//         */
+//        Bitmap getCacheImage(String url);
+//    }
 }

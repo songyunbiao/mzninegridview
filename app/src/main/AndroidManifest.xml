@@ -19,11 +19,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.PictureActivity"/>
+        <activity
+            android:name=".activity.PhotoActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <!--<activity-->
+            <!--android:name=".activity.PictureActivity"-->
+            <!--android:theme="@style/Theme.AppCompat.Translucent"/>-->
 
         <!--<meta-data-->
-            <!--android:name="com.example.mywechat.StethoOkHttpGlideModule"-->
-            <!--android:value="GlideModule"/>-->
+        <!--android:name="com.example.mywechat.StethoOkHttpGlideModule"-->
+        <!--android:value="GlideModule"/>-->
     </application>
 
 </manifest>

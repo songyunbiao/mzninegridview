@@ -11,12 +11,12 @@ import com.example.mywechat.widget.NineGridView;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class NineGridViewAdapter implements Serializable {
+public abstract class NineGridViewAdapter{
 
     protected Context context;
     private List<ImageInfo> imageInfo;
 
-    public NineGridViewAdapter(Context context, List<ImageInfo> imageInfo) {
+    NineGridViewAdapter(Context context, List<ImageInfo> imageInfo) {
         this.context = context;
         this.imageInfo = imageInfo;
     }
@@ -42,7 +42,6 @@ public abstract class NineGridViewAdapter implements Serializable {
     public ImageView generateImageView(Context context) {
         NineGridViewWrapper imageView = new NineGridViewWrapper(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.ic_launcher);
         return imageView;
     }
 

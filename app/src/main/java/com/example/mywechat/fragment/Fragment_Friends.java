@@ -1,13 +1,9 @@
 package com.example.mywechat.fragment;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +11,11 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.mywechat.ImageInfo;
 import com.example.mywechat.R;
-import com.example.mywechat.activity.PictureActivity;
 import com.example.mywechat.adapter.NineGridViewClickAdapter;
 import com.example.mywechat.widget.NineGridView;
 
@@ -40,6 +38,7 @@ public class Fragment_Friends extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         imageInfo = new ImageInfo();
         imageInfo.setThumbnailUrl("http://ww4.sinaimg.cn/large/7a8aed7bgw1ewsip9thfoj20hs0qo774.jpg");
         imageUrls.add(imageInfo);
@@ -80,13 +79,27 @@ public class Fragment_Friends extends Fragment {
         imageInfo.setThumbnailUrl("http://ww1.sinaimg.cn/large/610dc034jw1f7qgschtz8j20hs0hsac7.jpg");
         imageUrls.add(imageInfo);
 
-        NineGridView.setImageLoader(new GlideImageLoader());
         NineGridView nineGridView = (NineGridView) layout.findViewById(R.id.nine_grid_view);
         nineGridView.setAdapter(new NineGridViewClickAdapter(getActivity(), imageUrls));
 
-
-//        Glide.with(getContext())
-//                .load(url)
+//        ImageView imageView = (ImageView) layout.findViewById(R.id.grid_view);
+//        Glide.with(getActivity())
+//                .load(imageUrls.get(0).getThumbnailUrl())
+//                .error(R.mipmap.ic_launcher)
+//                .listener(new RequestListener<String, GlideDrawable>() {
+//                    @Override
+//                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                        Log.e(TAG, "onException " + e);
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                        Log.e(TAG, "onResourceReady ");
+//
+//                        return false;
+//                    }
+//                })
 //                .into(imageView);
 //
 //        imageView.setOnClickListener(new View.OnClickListener() {
@@ -97,24 +110,24 @@ public class Fragment_Friends extends Fragment {
 //        });
     }
 
-
-    /** Glide 加载 */
-    private class GlideImageLoader implements NineGridView.ImageLoader {
-        @Override
-        public void onDisplayImage(Context context, ImageView imageView, String url) {
-            Glide.with(context).load(url)//
-                    .placeholder(R.drawable.ic_default_color)//
-                    .error(R.drawable.ic_default_color)//
-                    .into(imageView);
-        }
-
-        @Override
-        public Bitmap getCacheImage(String url) {
-            return null;
-        }
-    }
-
 //    private void startPictureActivity(View transitView) {
+//        ArrayList<Rect> rects = new ArrayList<>();
+//        for (int i = 0; i < 1; i++) {
+//            Rect rect = new Rect();
+//            View child = transitView;
+//            child.getGlobalVisibleRect(rect);
+//            rects.add(rect);
+//        }
+//
+//        Intent intent = new Intent(getActivity(), PhotoActivity.class);
+//        intent.putExtra(PhotoActivity.IMG_URLS, JSON.toJSONString(imageUrls));
+//        intent.putExtra(PhotoActivity.INDEX, 0);
+//        intent.putExtra(PhotoActivity.BOUNDS, JSON.toJSONString(rects));
+//        getActivity().startActivity(intent);
+//        getActivity().overridePendingTransition(0, 0);
+//    }
+
+// private void startPictureActivity(View transitView) {
 //        Intent intent = new Intent(getContext(), PictureActivity.class);
 //        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
 //                getActivity(), transitView, PictureActivity.TRANSIT_PIC);
