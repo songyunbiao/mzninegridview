@@ -3,6 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
+    lintOptions {
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.example.mywechat"
         minSdkVersion 15
@@ -35,5 +38,6 @@ dependencies {
     //    compile 'com.github.chrisbanes:PhotoView:1.3.0'
     //    compile 'com.github.chrisbanes.photoview:library:1.2.4'
     compile 'com.alibaba:fastjson:1.2.17'
-    compile project(':library')
+//    compile project(':library')
+    compile 'com.example.mzninegridview:mzninegridview:1.0.0'
 }
