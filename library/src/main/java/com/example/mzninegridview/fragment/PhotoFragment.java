@@ -45,7 +45,7 @@ public class PhotoFragment extends Fragment {
 			String imgUrl = args.getString(IMG_URL);
 			startBounds = args.getParcelable(IMG_STAT_BOUNDS);
 			//TODO
-			Glide.with(getActivity())
+			Glide.with(this)
 					.load(imgUrl)//
 					.into(ivPhoto);
 		}

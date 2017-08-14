@@ -49,7 +49,7 @@ publish {
     userOrg = "syb"//bintray中的用户名
     groupId = 'com.example.mzninegridview'//根地址，一般是com.用户名
     artifactId = 'mzninegridview'//library名称
-    publishVersion = '1.0.0'//版本号，更新Library的时候只需要增加版本号即可。
+    publishVersion = '1.0.2'//版本号，更新Library的时候只需要增加版本号即可。
     desc = 'first jCenter for Android'//描述，这个随意
     //website：项目地址，一般项目都会上传github,这里给github的地址即可
     website = 'https://github.com/songyunbiao/mzninegridview'

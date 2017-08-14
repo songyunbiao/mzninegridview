@@ -1,5 +1,7 @@
 package com.example.mzninegridview.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
@@ -13,7 +15,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import com.alibaba.fastjson.JSON;
-import com.example.mzninegridview.ImageInfo;
 import com.example.mzninegridview.widget.PhotoViewPager;
 import com.example.mzninegridview.R;
 import com.example.mzninegridview.fragment.PhotoFragment;
@@ -27,20 +28,26 @@ import java.util.List;
  * Created by song
  * on 2016-10-17 上午11:25.
  */
-
 public class PhotoActivity extends FragmentActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     public static final String IMG_URLS = "imgUrls";
     public static final String BOUNDS = "bounds";
     public static final String INDEX = "index";
 
     private PhotoViewPager viewPager;
-    private List<ImageInfo> imgUrls;
-    private List<Rect> rects;
     private ArrayList<PhotoFragment> fragments;
     private int index;
-    private PhotoFragmentAdapter adapter;
     private ViewPagerIndicator indicator;
     private View root;
+
+    public static void intentTo(Activity activity, List<String> imageUrls, ArrayList<Rect> rects,int index){
+        Intent intent = new Intent(activity, PhotoActivity.class);
+        intent.putExtra(PhotoActivity.IMG_URLS, JSON.toJSONString(imageUrls));
+
+        intent.putExtra(PhotoActivity.INDEX, index);
+        intent.putExtra(PhotoActivity.BOUNDS, JSON.toJSONString(rects));
+        activity.startActivity(intent);
+        activity.overridePendingTransition(0, 0);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +58,21 @@ public class PhotoActivity extends FragmentActivity implements ViewTreeObserver.
         indicator = (ViewPagerIndicator) findViewById(R.id.vp_indicator);
 
         String temp = getIntent().getStringExtra(IMG_URLS);
-        imgUrls = JSON.parseArray(temp, ImageInfo.class);
+        List<String> imgUrls = JSON.parseArray(temp, String.class);
         String tempRect = getIntent().getStringExtra(BOUNDS);
-        rects = JSON.parseArray(tempRect, Rect.class);
+        List<Rect> rects = JSON.parseArray(tempRect, Rect.class);
         index = getIntent().getIntExtra(INDEX, 0);
 
         if (rects == null || imgUrls == null) {
             finish();
         } else {
-            adapter = new PhotoFragmentAdapter(getSupportFragmentManager());
+            PhotoFragmentAdapter adapter = new PhotoFragmentAdapter(getSupportFragmentManager());
             fragments = new ArrayList<>();
             int rectSize = rects.size();
             for (int i = 0; i < imgUrls.size(); i++) {
                 PhotoFragment fragment = new PhotoFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(PhotoFragment.IMG_URL, imgUrls.get(i).getThumbnailUrl());
+                bundle.putString(PhotoFragment.IMG_URL, imgUrls.get(i));
 
                 int tempIndex = i < rectSize ? i : rectSize - 1;
                 bundle.putParcelable(PhotoFragment.IMG_STAT_BOUNDS, rects.get(tempIndex));
@@ -79,7 +86,6 @@ public class PhotoActivity extends FragmentActivity implements ViewTreeObserver.
             viewPager.setCurrentItem(index);
         }
     }
-
 
     @Override
     public void onGlobalLayout() {

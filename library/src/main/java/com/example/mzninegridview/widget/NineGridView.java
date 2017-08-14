@@ -2,7 +2,6 @@ package com.example.mzninegridview.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.mzninegridview.ImageInfo;
 import com.example.mzninegridview.adapter.NineGridViewAdapter;
 import com.example.mzninegridview.R;
 
@@ -35,9 +33,10 @@ public class NineGridView extends ViewGroup {
     private int gridWidth;      // 宫格宽度
     private int gridHeight;     // 宫格高度
 
+    private List<String> mImageInfo;
     private List<ImageView> imageViews;
-    private List<ImageInfo> mImageInfo;
     private NineGridViewAdapter mAdapter;
+    private OnImageItemClickListener mOnImageItemClickListener;
 
     public NineGridView(Context context) {
         this(context, null);
@@ -97,10 +96,10 @@ public class NineGridView extends ViewGroup {
         if (mImageInfo == null) return;
         int childrenCount = mImageInfo.size();
         for (int i = 0; i < childrenCount; i++) {
-            ImageView childrenView = (ImageView) getChildAt(i);
+            ImageView childrenView = imageViews.get(i);
             Glide.with(getContext())
-                    .load(mImageInfo.get(i).getThumbnailUrl())
-                    .asBitmap()
+                    .load(mImageInfo.get(i))
+//                    .asBitmap()
 //                    .error(R.mipmap.ic_launcher)//TODO
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(childrenView);
@@ -117,9 +116,8 @@ public class NineGridView extends ViewGroup {
     /**
      * 设置适配器
      */
-    public void setAdapter(@NonNull NineGridViewAdapter adapter) {
+    public void setAdapter(NineGridViewAdapter adapter, List<String> imageInfo) {
         mAdapter = adapter;
-        List<ImageInfo> imageInfo = adapter.getImageInfo();
 
         if (imageInfo == null || imageInfo.isEmpty()) {
             setVisibility(GONE);
@@ -166,11 +164,11 @@ public class NineGridView extends ViewGroup {
             }
         }
         //修改最后一个条目，决定是否显示更多
-        if (adapter.getImageInfo().size() > maxImageSize) {
+        if (imageInfo.size() > maxImageSize) {
             View child = getChildAt(maxImageSize - 1);
             if (child instanceof NineGridViewWrapper) {
                 NineGridViewWrapper imageView = (NineGridViewWrapper) child;
-                imageView.setMoreNum(adapter.getImageInfo().size() - maxImageSize);
+                imageView.setMoreNum(imageInfo.size() - maxImageSize);
             }
         }
         mImageInfo = imageInfo;
@@ -189,12 +187,27 @@ public class NineGridView extends ViewGroup {
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAdapter.onImageItemClick(getContext(), NineGridView.this, position, mAdapter.getImageInfo());
+                    if (mOnImageItemClickListener != null){
+                        mOnImageItemClickListener.onClick(NineGridView.this, position);
+                    }
                 }
             });
             imageViews.add(imageView);
         }
         return imageView;
+    }
+
+
+    public interface OnImageItemClickListener{
+        /**
+         * 如果要实现图片点击的逻辑，重写此方法即可
+         * @param index        当前点击图片的的索引
+         */
+        void onClick(NineGridView view, int index);
+    }
+
+    public void setOnImageItemClickListener(OnImageItemClickListener listener){
+        this.mOnImageItemClickListener = listener;
     }
 
     /**
